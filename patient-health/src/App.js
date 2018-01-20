@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import PatientSummary from './PatientSummary.js';
-import ChartViewer from './ChartViewer.js';
 import MedicineRequestsList from './MedicineRequestsList.js';
 import ImmunizationsList from './ImmunizationsList.js';
 import ConditionsList from './ConditionsList.js';
+import ChartsList from './ChartsList.js';
 import './App.css';
 
 class App extends Component {
@@ -82,6 +82,74 @@ class App extends Component {
           date: "15/01/18"
         }
       ],
+
+      observs: {
+        weight: {
+          units: "kg",
+          values: [
+            {
+              points: [
+                {
+                  series: "Weight",
+                  value: "80"
+                }
+              ],
+              date: "02/01/03"
+            },
+            {
+              points: [
+                {
+                  series: "Weight",
+                  value: "83"
+                }
+              ],
+              date: "02/01/04"
+            },
+            {
+              points: [
+                {
+                  series: "Weight",
+                  value: "81"
+                }
+              ],
+              date: "02/01/05"
+            }
+          ]
+        },
+
+        height: {
+          units: "m",
+          values: [
+            {
+              points: [
+                {
+                  series: "Height",
+                  value: "1.87"
+                }
+              ],
+              date: "01/01/03"
+            },
+            {
+              points: [
+                {
+                  series: "Height",
+                  value: "1.86"
+                }
+              ],
+              date: "01/01/04"
+            },
+            {
+              points: [
+                {
+                  series: "Height",
+                  value: "1.84"
+                }
+              ],
+              date: "01/01/05"
+            }
+          ]
+        }
+      }
     }});
   }
 
@@ -96,6 +164,7 @@ class App extends Component {
         {this.state != null && this.state.data.medreqs.length > 0 && <MedicineRequestsList medreqs={this.state.data.medreqs}/>}
         {this.state != null && this.state.data.immuns.length > 0 && <ImmunizationsList immuns={this.state.data.immuns}/>}
         {this.state != null && this.state.data.conds.length > 0 && <ConditionsList conds={this.state.data.conds}/>}
+        {this.state != null && <ChartsList observs={this.state.data.observs}/>}
       </div>
     );
   }
