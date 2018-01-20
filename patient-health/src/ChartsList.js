@@ -8,7 +8,7 @@ class ChartsList extends Component {
     var charts = [];
 
     for (var item in this.props.observs) {
-      charts.push(<ChartViewer units={this.props.observs[item].units} values={this.props.observs[item].values} />);
+      charts.push(<ChartViewer units={this.props.observs[item].units} values={this.props.observs[item].values} name={item} />);
     }
 
     return charts;

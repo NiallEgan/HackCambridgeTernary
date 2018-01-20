@@ -9,12 +9,13 @@ class ChartViewer extends Component {
     var labels = [];
 
     var i,j,k;
+    var val,p;
 
     for (i = 0; i < this.props.values.length; ++i) {
-      var val = this.props.values[i];
+      val = this.props.values[i];
       labels.push(val.date);
       for (j = 0; j < val.points.length; ++j) {
-        var p = val.points[j];
+        p = val.points[j];
         if (!series.includes(p.series)) series.push(p.series);
       }
     }
@@ -26,10 +27,10 @@ class ChartViewer extends Component {
       var data = [];
 
       for (i = 0; i < this.props.values.length; ++i) {
-        var val = this.props.values[i];
+        val = this.props.values[i];
         for (j = 0; j < val.points.length; ++j) {
-          var p = val.points[j];
-          if (currSeries == p.series) data.push(p.value);
+          p = val.points[j];
+          if (currSeries === p.series) data.push(p.value);
         }
       }
 
@@ -82,9 +83,7 @@ class ChartViewer extends Component {
   render() {
     return (
       <div className="ChartViewer">
-        {this.state != null && <h2>{this.state.series.map(
-          (s) =>  (this.state.series.indexOf(s) !== this.state.series.length-1 ? ", " : "")
-        )} ({this.props.units})</h2>}
+        {this.state != null && <h2>{this.props.name.charAt(0).toUpperCase() + this.props.name.slice(1)} ({this.props.units})</h2>}
         <canvas ref={(c) => this.canvas = c} width="600px" />
       </div>
     );

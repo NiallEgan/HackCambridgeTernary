@@ -1,4 +1,8 @@
 .ChartsList {
   margin: auto;
   width: 50%;
+
+  border: 2px solid black;
+
+  padding-bottom: 50px;
 }
