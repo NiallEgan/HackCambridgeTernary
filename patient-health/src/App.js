@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import PatientSummary from './PatientSummary.js';
 import ChartViewer from './ChartViewer.js';
+import MedicineRequestsList from './MedicineRequestsList.js';
 import './App.css';
 
 class App extends Component {
@@ -22,26 +23,39 @@ class App extends Component {
     this.setState({data: {
       provider: "Chelsea and Westminster Hospital",
       person: {
-        name: "Matteo Pozzi",
+        name: "John Smith",
         prefix: "Mr.",
-        birthday: "19/07/1998",
+        birthday: "15/05/1945",
         gender: "M",
 
         address: {
-          house: "26",
-          street: "St Ann's Villas",
+          house: "100",
+          street: "Nice Road",
           city: "London",
           country: "UK"
         },
 
-        phone: "+44 7807207272",
+        phone: "+44 1236547890",
 
         languages: [
           "en-US",
-          "it",
-          "fr"
+          "fr",
+          "de"
         ]
-      }
+      },
+
+      medreqs: [
+        {
+          type: "Naproxen Sodium 20mg",
+          status: "active",
+          date: "10/01/18"
+        },
+        {
+          type: "Penicillin V Potassium 250mg",
+          status: "active",
+          date: "15/01/18"
+        }
+      ]
     }});
   }
 
@@ -53,7 +67,7 @@ class App extends Component {
           <h1 className="App-title">myHealth</h1>
         </header>
         {this.state != null && <PatientSummary data={this.state.data} />}
-        {this.state != null && <ChartViewer />}
+        {this.state != null && this.state.data.medreqs.length > 0 && <MedicineRequestsList medreqs={this.state.data.medreqs}/>}
       </div>
     );
   }
