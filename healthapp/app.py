@@ -1,4 +1,6 @@
 from flask import Flask
+from loader import *
+
 
 app = Flask(__name__)
 
@@ -9,5 +11,5 @@ def index():
 @app.route('/record/<id>')
 def display_record(id):
     f = open('../data/{}.json'.format(id), 'r')
-    return f.read()
+    return compressJson(f.read())
 
