@@ -2,8 +2,7 @@ import json
 import string
 
 def compressJson(inputFile):
-    f = open(inputFile)
-    fhirClass = json.load(f)
+    fhirClass = json.load(inputFile)
     mainObj = fhirClass['entry']
     output = {}
     
