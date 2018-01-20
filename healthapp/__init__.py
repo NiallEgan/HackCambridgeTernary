@@ -1,4 +1,4 @@
-
+from healthapp.loader import *
 
 
 

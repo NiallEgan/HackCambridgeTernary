@@ -1,5 +1,5 @@
 from flask import Flask
-from loader import *
+from healthapp.loader import *
 
 
 app = Flask(__name__)
