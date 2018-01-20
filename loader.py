@@ -24,7 +24,7 @@ def compressJson(inputFile):
             name = name + removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
             break
     if 'prefix' in dictNames:
-        outputPerson['prefix'] = dictNames['prefix']
+        outputPerson['prefix'] = dictNames['prefix'][0]
     else:
         outputPerson['prefix'] = ""
     outputPerson['name'] = name
@@ -61,7 +61,10 @@ def compressJson(inputFile):
                 immuns.append(immunization)
         ##### Medication Request
         elif item['resourceType'] == "MedicationRequest":
-            medication = {'type':item['medicationCodeableConcept']['coding'][0]['display'],'code':item['medicationCodeableConcept']['coding'][0]['code'],'date':item['authoredOn'],'status':item['status'],'dosage':item['dosageInstruction'][0]}
+            dosage = ""
+            if 'dosageInstruction' in item:
+                dosage = item['dosageInstruction'][0]
+            medication = {'type':item['medicationCodeableConcept']['coding'][0]['display'],'code':item['medicationCodeableConcept']['coding'][0]['code'],'date':item['authoredOn'],'status':item['status'],'dosage':dosage}
             medreqs.append(medication)
         ##### Observation
         elif item['resourceType'] == "Observation":
@@ -71,19 +74,34 @@ def compressJson(inputFile):
                 for val in item['component']:
                     rec = {'type':val['code']['text'],'value':val['valueQuantity']['value'],'units':val['valueQuantity']['unit']}
                     values.append(rec)
-            else:
-                rec2 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
+            elif "valueCodeableConcept" in item:
+                rec2 = {'type':item['code']['text'],'value':item['valueCodeableConcept']['coding'][0]['display'],'units':'N/A'}
                 values.append(rec2)
+            else:
+                rec3 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
+                values.append(rec3)
             observation = {'date': item['issued'],'values':values}
             observs.append(observation)
     # Assemble output lists        
     output['conds'] = conds
     output['immuns'] = immuns
     output['medreqs'] = medreqs
-    output['observs'] = observs
+    output['observs'] = groupObservs(observs)
     return json.JSONEncoder().encode(output)
     
-    
+def groupObservs(ungrouped):
+    print(ungrouped)
+    grouped = {}
+    for observation in ungrouped:
+        for valueToken in observation['values']:
+            if valueToken['type'] not in grouped:
+                grouped[valueToken['type']] = {'units':valueToken['units'],'values':[]}
+            pair = {'date':observation['date'],'value':valueToken['value']}
+            grouped[valueToken['type']]['values'].append(pair)
+    return grouped
+
+
+     
     
 def removeDigits(inString):
     return ''.join(i for i in inString if i.isalpha())
