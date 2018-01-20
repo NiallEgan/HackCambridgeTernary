@@ -1,0 +1,44 @@
+.PatientSummary {
+  border: 2px solid black;
+
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-right: 20px;
+  margin-bottom: 40px;
+
+  text-align: left;
+
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+
+  width: 30%;
+
+  float: left;
+}
+
+.PatientSummary-heading {
+  margin-bottom: 20px;
+}
+
+.PatientSummary-line {
+  clear: both;
+  padding-top: 20px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid black;
+}
+
+.PatientSummary-tag {
+  float: left;
+  font-size: 18px;
+}
+
+.PatientSummary-field {
+  float: right;
+  font-size: 18px;
+}
+
+.PatientSummary-address {
+  text-align: right;
+  font-size: 18px;
+}
