@@ -1,4 +1,4 @@
-.MedicineRequestsList {
+.ImmunizationsList {
   margin-top: 50px;
   margin-left: 50px;
   margin-right: 20px;
@@ -16,8 +16,8 @@
   border: 2px solid black;
 }
 
-.MedicineRequestsList-heading {
+.ImmunizationsList-heading {
   margin-top: 0px;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
   text-align: left;
 }

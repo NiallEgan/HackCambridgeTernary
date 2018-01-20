@@ -1,4 +1,4 @@
-.MedicineRequestsList {
+.ConditionsList {
   margin-top: 50px;
   margin-left: 50px;
   margin-right: 20px;
@@ -16,7 +16,7 @@
   border: 2px solid black;
 }
 
-.MedicineRequestsList-heading {
+.ConditionsList-heading {
   margin-top: 0px;
   margin-bottom: 35px;
   text-align: left;

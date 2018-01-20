@@ -7,6 +7,8 @@ class MedicineRequestsList extends Component {
   render() {
     return (
       <div className="MedicineRequestsList">
+        <h2 className="MedicineRequestsList-heading">Medicine Requests</h2>
+
         {this.props.medreqs.map(
           (m) => <MedicineRequest type={m.type} status={m.status} date={m.date} />
         )}

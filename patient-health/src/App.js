@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import PatientSummary from './PatientSummary.js';
 import ChartViewer from './ChartViewer.js';
 import MedicineRequestsList from './MedicineRequestsList.js';
+import ImmunizationsList from './ImmunizationsList.js';
+import ConditionsList from './ConditionsList.js';
 import './App.css';
 
 class App extends Component {
@@ -44,6 +46,30 @@ class App extends Component {
         ]
       },
 
+      conds: [
+        {
+          date: "01/03/02",
+          type: "Epilepsy",
+          status: "active"
+        },
+        {
+          date: "05/06/05",
+          type: "Skin Cancer",
+          status: "resolved"
+        }
+      ],
+
+      immuns: [
+        {
+          date: "16/10/17",
+          type: "Influenza"
+        },
+        {
+          date: "09/10/45",
+          type: "Measles"
+        }
+      ],
+
       medreqs: [
         {
           type: "Naproxen Sodium 20mg",
@@ -55,7 +81,7 @@ class App extends Component {
           status: "active",
           date: "15/01/18"
         }
-      ]
+      ],
     }});
   }
 
@@ -68,6 +94,8 @@ class App extends Component {
         </header>
         {this.state != null && <PatientSummary data={this.state.data} />}
         {this.state != null && this.state.data.medreqs.length > 0 && <MedicineRequestsList medreqs={this.state.data.medreqs}/>}
+        {this.state != null && this.state.data.immuns.length > 0 && <ImmunizationsList immuns={this.state.data.immuns}/>}
+        {this.state != null && this.state.data.conds.length > 0 && <ConditionsList conds={this.state.data.conds}/>}
       </div>
     );
   }
