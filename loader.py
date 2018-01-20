@@ -48,6 +48,8 @@ def compressJson(inputFile):
     medreqs = []
     observs = []
     
+    # First two fields are always set, so loop the rest
+    # (could later add validation for strictness)
     for i in range(2,len(mainObj)):
         item = mainObj[i]['resource']
         ##### Condition
@@ -69,28 +71,35 @@ def compressJson(inputFile):
         ##### Observation
         elif item['resourceType'] == "Observation":
             values = []
-            if 'component' in item:
                 # Multi-value observation
+            if 'component' in item:
                 for val in item['component']:
                     rec = {'type':val['code']['text'],'value':val['valueQuantity']['value'],'units':val['valueQuantity']['unit']}
                     values.append(rec)
+                # Qualitative observation
             elif "valueCodeableConcept" in item:
                 rec2 = {'type':item['code']['text'],'value':item['valueCodeableConcept']['coding'][0]['display'],'units':'N/A'}
                 values.append(rec2)
             else:
+                # Single-valued, quantitative observation
                 rec3 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
                 values.append(rec3)
-            observation = {'date': item['issued'],'values':values}
+            observation = {'date': item['issued'][:10],'values':values}
             observs.append(observation)
-    # Assemble output lists        
+            
+    # Sort and fix output lists      
+    conds.sort(key = lambda item: ''.join(i for i in item['date'] if i != '-'))
     output['conds'] = conds
+    immuns.sort(key = lambda item: ''.join(i for i in item['date'] if i != '-'))
     output['immuns'] = immuns
+    medreqs.sort(key = lambda item: ''.join(i for i in item['date'] if i != '-'))
     output['medreqs'] = medreqs
+    # Observations are sorted by the grouping function
     output['observs'] = groupObservs(observs)
+    
     return json.JSONEncoder().encode(output)
     
 def groupObservs(ungrouped):
-    print(ungrouped)
     grouped = {}
     for observation in ungrouped:
         for valueToken in observation['values']:
@@ -98,10 +107,9 @@ def groupObservs(ungrouped):
                 grouped[valueToken['type']] = {'units':valueToken['units'],'values':[]}
             pair = {'date':observation['date'],'value':valueToken['value']}
             grouped[valueToken['type']]['values'].append(pair)
+    for obstype in grouped:
+        grouped[obstype]['values'].sort(key= lambda item: ''.join(i for i in item['date'] if i != '-'))
     return grouped
-
-
-     
     
 def removeDigits(inString):
     return ''.join(i for i in inString if i.isalpha())
