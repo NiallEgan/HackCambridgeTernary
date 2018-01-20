@@ -24,7 +24,7 @@ def compressJson(inputFile):
             name = name + removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
             break
     if 'prefix' in dictNames:
-        outputPerson['prefix'] = dictNames['prefix']
+        outputPerson['prefix'] = dictNames['prefix'][0]
     else:
         outputPerson['prefix'] = ""
     outputPerson['name'] = name
@@ -75,7 +75,8 @@ def compressJson(inputFile):
                     rec = {'type':val['code']['text'],'value':val['valueQuantity']['value'],'units':val['valueQuantity']['unit']}
                     values.append(rec)
             elif "valueCodeableConcept" in item:
-                rec2 = {'type':'diagnosis','value':item['valueCodeableConcept']['coding'][0]['display']}
+                rec2 = {'type':item['code']['text'],'value':item['valueCodeableConcept']['coding'][0]['display'],'units':'N/A'}
+                values.append(rec2)
             else:
                 rec3 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
                 values.append(rec3)
@@ -89,6 +90,7 @@ def compressJson(inputFile):
     return json.JSONEncoder().encode(output)
     
 def groupObservs(ungrouped):
+    print(ungrouped)
     grouped = {}
     for observation in ungrouped:
         for valueToken in observation['values']:
