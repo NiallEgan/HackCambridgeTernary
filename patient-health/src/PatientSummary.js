@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import LocaleCode from 'locale-code';
 import './PatientSummary.css';
 
 class PatientSummary extends Component {
@@ -24,10 +25,38 @@ class PatientSummary extends Component {
   render() {
     return (
       <div className="PatientSummary">
-        <h2>{this.person.prefix} {this.person.name}</h2>
-        <div>
-          <p>DOB: {this.person.birthday}</p>
-          <p>Gender: {this.person.gender}</p>
+        <h2 className="PatientSummary-heading">{this.person.prefix} {this.person.name}</h2>
+        <h4 className="PatientSummary-heading">{this.props.data.provider}</h4>
+
+        <div className="PatientSummary-line">
+          <label className="PatientSummary-tag">DOB:</label>
+          <label className="PatientSummary-field">{this.person.birthday}</label>
+        </div>
+
+        <div className="PatientSummary-line">
+          <label className="PatientSummary-tag">Gender:</label>
+          <label className="PatientSummary-field">{this.person.gender}</label>
+        </div>
+
+        <div className="PatientSummary-line">
+          <label className="PatientSummary-tag">Address:</label>
+          <div className="PatientSummary-address">
+            <label>{this.person.address.house} {this.person.address.street}</label><br/>
+            <label>{this.person.address.city}</label><br/>
+            <label>{this.person.address.country}</label>
+          </div>
+        </div>
+
+        <div className="PatientSummary-line">
+          <label className="PatientSummary-tag">Phone:</label>
+          <label className="PatientSummary-field">{this.person.phone}</label>
+        </div>
+
+        <div className="PatientSummary-line">
+          <label className="PatientSummary-tag">Languages:</label>
+          <label className="PatientSummary-field">{this.person.languages.map(
+            (l) => LocaleCode.getLanguageNativeName(l + (l.includes("-") ? "" : "-" + l.toUpperCase())) + (this.person.languages.indexOf(l) !== this.person.languages.length-1 ? ", " : "")
+          )}</label>
         </div>
       </div>
     );

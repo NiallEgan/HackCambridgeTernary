@@ -29,7 +29,7 @@ class ChartViewer extends Component {
   render() {
     return (
       <div className="ChartViewer">
-        <canvas ref={(c) => this.canvas = c} width="500px" />
+        <canvas ref={(c) => this.canvas = c} width="600px" />
       </div>
     );
   }

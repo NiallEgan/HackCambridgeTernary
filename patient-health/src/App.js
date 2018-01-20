@@ -37,7 +37,7 @@ class App extends Component {
         phone: "+44 7807207272",
 
         languages: [
-          "en-us",
+          "en-US",
           "it",
           "fr"
         ]
