@@ -30,13 +30,14 @@ def compressJson(inputFile):
     outputPerson['name'] = name
     outputPerson['birthday'] = patientInfo['birthDate'] #YYYY-MM-DD
     outputPerson['gender'] = patientInfo['gender'] #female or male, full string
-    line = patientInfo['address'][0]['line'].reverse()
+    line = patientInfo['address'][0]['line']
+    line.reverse()
     outputPerson['address'] = ','.join(line) + ',' + patientInfo['address'][0]['city'] + ',' + patientInfo['address'][0]['country']
     outputPerson['phone'] = patientInfo['telecom']
     outputPerson['languages'] = []
     for item in patientInfo['communication']:
-        outputPerson['languages'].append(item['language']['coding']['code']
-    
+        outputPerson['languages'].append(item['language']['coding'][0]['code'])
+
     output['person'] = outputPerson
     
     ####################################
@@ -45,9 +46,10 @@ def compressJson(inputFile):
     conds = []
     immuns = []
     medreqs = []
+    observs = []
     
-    for i in range(2,len(mainInfo)):
-        item = mainInfo[i]['resource']
+    for i in range(2,len(mainObj)):
+        item = mainObj[i]['resource']
         ##### Condition
         if item['resourceType'] == "Condition":
             condition = {'date':item['assertedDate'],'type':item['code']['text'],'status':item['clinicalStatus']}
@@ -59,13 +61,30 @@ def compressJson(inputFile):
                 immuns.append(immunization)
         ##### Medication Request
         elif item['resourceType'] == "MedicationRequest":
-            medication = {'type':item['medicationCodeableConcept']['coding'][0]['display'],'date':item['authoredOn'],status:item['status']}
+            medication = {'type':item['medicationCodeableConcept']['coding'][0]['display'],'code':item['medicationCodeableConcept']['coding'][0]['code'],'date':item['authoredOn'],'status':item['status'],'dosage':item['dosageInstruction'][0]}
             medreqs.append(medication)
-        
-                
+        ##### Observation
+        elif item['resourceType'] == "Observation":
+            values = []
+            if 'component' in item:
+                # Multi-value observation
+                for val in item['component']:
+                    rec = {'type':val['code']['text'],'value':val['valueQuantity']['value'],'units':val['valueQuantity']['unit']}
+                    values.append(rec)
+            else:
+                rec2 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
+                values.append(rec2)
+            observation = {'date': item['issued'],'values':values}
+            observs.append(observation)
+    # Assemble output lists        
+    output['conds'] = conds
+    output['immuns'] = immuns
+    output['medreqs'] = medreqs
+    output['observs'] = observs
+    return json.JSONEncoder().encode(output)
     
     
     
 def removeDigits(inString):
-    return inString.translate(None,'0123456789')
+    return ''.join(i for i in inString if i.isalpha())
 
