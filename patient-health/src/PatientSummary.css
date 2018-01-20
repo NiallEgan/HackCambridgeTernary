@@ -1,0 +1,17 @@
+.PatientSummary {
+  border: 2px solid black;
+
+  margin-top: 50px;
+  margin-left: 50px;
+  margin-right: 20px;
+  margin-bottom: 40px;
+
+  text-align: left;
+
+  padding-left: 20px;
+  padding-bottom: 5px;
+
+  width: 30%;
+
+  float: left;
+}
