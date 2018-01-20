@@ -25,14 +25,21 @@ def get_summary(medicine):
         wikipedia.set_lang('en')
         return first_two_sentences(wikipedia.summary(medicine))
 
-def insert_descriptions(intermediate_format):
-    intermediate_format = json.loads(intermediate_format)
-    medication_list = intermediate_format['medreqs']
-
-    description = {medication['type']: 
-            [get_summary(ingredient) for ingredient in get_ingredient(medication['code'])] \
-             for medication in medication_list if medication['status'] == 'active'}
-    return json.dumps(description)
+def insert_descriptions(intermediate_format)
+    intermediate_format2 = json.loads(intermediate_format)
+    medication_requests = intermediate_format2['medreqs']
+    medication_types = {}
+    for item in medication_requests:
+        if item['type'] not in medication_types and item['status'] == 'active':
+            medication_types[item['type']] = [get_summary(ingredient) for ingredient in get_ingredient(item['code'])]
+    intermediate_format2['descriptions'] = medication_types
+    return json.dumps(intermediate_format2)
+    
+    #medication_list = intermediate_format['medreqs']
+    #description = {medication['type']: 
+    #        [get_summary(ingredient) for ingredient in get_ingredient(medication['code'])] \
+    #         for medication in medication_list if medication['status'] == 'active'}
+    #return json.dumps(description)
 
 
 if __name__ == '__main__':
