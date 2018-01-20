@@ -25,7 +25,7 @@ def get_summary(medicine):
         wikipedia.set_lang('en')
         return first_two_sentences(wikipedia.summary(medicine))
 
-def insert_descriptions(intermediate_format)
+def insert_descriptions(intermediate_format):
     intermediate_format2 = json.loads(intermediate_format)
     medication_requests = intermediate_format2['medreqs']
     medication_types = {}
