@@ -7,39 +7,6 @@ def compressJson(inputFile):
     output = {}
     
     ####################################
-    # Medical care provider
-    
-    providerInfo = mainObj[0]['resource']
-    output['provider'] = providerInfo['name']
-    
-    ####################################
-    # Personal info
-    
-    patientInfo = mainObj[1]['resource']
-    outputPerson = {}
-    name = ""
-    for dictNames in patientInfo['name']:
-        if dictNames['use'] == 'official':
-            name = name + removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
-            break
-    if 'prefix' in dictNames:
-        outputPerson['prefix'] = dictNames['prefix'][0]
-    else:
-        outputPerson['prefix'] = ""
-    outputPerson['name'] = name
-    outputPerson['birthday'] = patientInfo['birthDate'] #YYYY-MM-DD
-    outputPerson['gender'] = patientInfo['gender'] #female or male, full string
-    line = patientInfo['address'][0]['line']
-    line.reverse()
-    outputPerson['address'] = ','.join(line) + ',' + patientInfo['address'][0]['city'] + ',' + patientInfo['address'][0]['country']
-    outputPerson['phone'] = patientInfo['telecom']
-    outputPerson['languages'] = []
-    for item in patientInfo['communication']:
-        outputPerson['languages'].append(item['language']['coding'][0]['code'])
-
-    output['person'] = outputPerson
-    
-    ####################################
     # Other stuff
     
     conds = []
@@ -47,19 +14,53 @@ def compressJson(inputFile):
     medreqs = []
     observs = []
     
-    # First two fields are always set, so loop the rest
-    # (could later add validation for strictness)
-    for i in range(2,len(mainObj)):
-        item = mainObj[i]['resource']
-        ##### Condition
+    for entry in mainObj:
+        item = entry['resource']
+        
+        # Patient entry
+        
+        if item['resourceType'] == "Patient":
+            if 'person' in output:
+                raise ValueError("Two sets of patient details were found in the json file")
+            canStore = True # We know it's a file about a person
+            patientInfo = mainObj[1]['resource']
+            outputPerson = {}
+            name = ""
+            for dictNames in item['name']:
+                if dictNames['use'] == 'official':
+                    name = name + removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
+                    break
+            if 'prefix' in dictNames:
+                outputPerson['prefix'] = dictNames['prefix'][0]
+            else:
+                outputPerson['prefix'] = ""
+            outputPerson['name'] = name
+            outputPerson['birthday'] = item['birthDate'] #YYYY-MM-DD
+            outputPerson['gender'] = item['gender'] #female or male, full string
+            line = patientInfo['address'][0]['line']
+            line.reverse()
+            outputPerson['address'] = ','.join(line) + ',' + item['address'][0]['city'] + ',' + item['address'][0]['country']
+            outputPerson['phone'] = item['telecom']
+            outputPerson['languages'] = []
+            for item2 in item['communication']:
+                outputPerson['languages'].append(item2['language']['coding'][0]['code'])
+            output['person'] = outputPerson
+            
+        ##### Only use the first organisation
+        if item['resourceType'] == "Organization" and 'provider' not in output:
+            output['provider'] = item['name']
+            
+        ##### Condition (long term)    
         if item['resourceType'] == "Condition":
             condition = {'date':item['assertedDate'],'type':item['code']['text'],'status':item['clinicalStatus']}
             conds.append(condition)
+            
         ##### Immunization
         elif item['resourceType'] == "Immunization":
             if item['status'] == "completed":
                 immunization = {'date':item['date'],'type':item['vaccineCode']['coding'][0]['display']}
                 immuns.append(immunization)
+                
         ##### Medication Request
         elif item['resourceType'] == "MedicationRequest":
             dosage = ""
@@ -67,6 +68,7 @@ def compressJson(inputFile):
                 dosage = item['dosageInstruction'][0]
             medication = {'type':item['medicationCodeableConcept']['coding'][0]['display'],'code':item['medicationCodeableConcept']['coding'][0]['code'],'date':item['authoredOn'],'status':item['status'],'dosage':dosage}
             medreqs.append(medication)
+            
         ##### Observation
         elif item['resourceType'] == "Observation":
             values = []
@@ -79,10 +81,12 @@ def compressJson(inputFile):
             elif "valueCodeableConcept" in item:
                 rec2 = {'type':item['code']['text'],'value':item['valueCodeableConcept']['coding'][0]['display'],'units':'N/A'}
                 values.append(rec2)
+            elif "valueString" in item:
+                rec3 = {'type':item['code']['text'],'value':item['valueString']}
             else:
                 # Single-valued, quantitative observation
-                rec3 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
-                values.append(rec3)
+                rec4 = {'type':item['code']['coding'][0]['display'],'value':item['valueQuantity']['value'],'units':item['valueQuantity']['unit']}
+                values.append(rec4)
             observation = {'date': item['issued'][:10],'values':values}
             observs.append(observation)
             
@@ -95,8 +99,9 @@ def compressJson(inputFile):
     output['medreqs'] = medreqs
     # Observations are sorted by the grouping function
     output['observs'] = groupObservs(observs)
-    
-    return json.JSONEncoder().encode(output)
+    if 'person' in output:
+        return json.dumps(output)
+    return ''
     
 def groupObservs(ungrouped):
     grouped = {}
