@@ -8,6 +8,23 @@ import json
 
 app = Flask(__name__)
 
+@app.before_first_request
+def buildFileIndex():
+    if not os.path.exists('../data/index.json'):
+        names = assembleNames('../data')
+        print(names)
+        json.dump(names,open('../data/index.json','w'))
+
+def findFileNumber(person_name):
+    obj = json.load('../data/index.json')
+    for name in obj.keys():
+        found = True
+        for nom in person_name.split(' '):
+            if nom not in name:
+                found = False
+                break
+        if found:
+            return obj[name]
 
 def add_descriptions(compressed_json):
     if compressed_json == '':
