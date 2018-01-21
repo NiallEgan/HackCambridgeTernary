@@ -1,0 +1,57 @@
+<html>
+	<head>
+	</head>
+	
+	<body>
+		<script>
+		
+		var names;
+		var values;
+		var counters;
+		
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var response = JSON.parse(xhttp.responseText);
+			
+			var obj = response.observs;
+			var show = JSON.stringify(obj);
+			//document.write(show);
+			
+			for (var key in obj) {
+			  if (obj.hasOwnProperty(key)) {
+				var val = obj[key];
+				document.write(key);
+				
+				var yaxis = val.values;
+				
+				//document.write(JSON.stringify(yaxis));
+				//document.write(yaxis.length);
+						
+				var result = yaxis.map(a => a.value);
+				
+				var ind = names.indexof(key);
+				
+				if(ind == -1){
+					names.push(key);
+					values.push(result);
+					counter.push(1);
+				}else{
+					values[ind] = values[ind].concat(result);
+					counter[ind] = counter[ind] + result.length;
+				}
+				
+			  }
+			}
+			
+			//document.write(names);
+		}
+		};
+		
+		xhttp.open("GET", "1.json", true);
+		xhttp.send();
+		
+		
+		</script>
+	</body>
+</html>	
