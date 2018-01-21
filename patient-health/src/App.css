@@ -22,6 +22,18 @@
   font-size: large;
 }
 
+.App-lhs {
+  float: left;
+  width: 38%;
+}
+
+.App-rhs {
+  float: right;
+  width: 50%;
+  padding-right: 50px;
+  padding-top: 50px;
+}
+
 @keyframes App-logo-move {
   0% { transform: translate(0px,0px); }
   50% { transform: translate(0px,10px) scale(0.96,1); }

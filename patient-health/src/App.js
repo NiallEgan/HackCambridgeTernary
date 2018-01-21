@@ -46,13 +46,19 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">myHealth</h1>
+          <h1 className="App-title">MedScape</h1>
         </header>
+
+        <div className="App-lhs">
         {this.state != null && <PatientSummary data={this.state.data} />}
         {this.state != null && this.state.data.medreqs.length > 0 && <MedicineRequestsList medreqs={this.state.data.medreqs} exp={this.state.explanations}/>}
         {this.state != null && this.state.data.immuns.length > 0 && <ImmunizationsList immuns={this.state.data.immuns}/>}
         {this.state != null && this.state.data.conds.length > 0 && <ConditionsList conds={this.state.data.conds}/>}
-        {this.state != null && <ChartsList observs={this.state.data.observs}/>}
+        </div>
+
+        <div className="App-rhs">
+          {this.state != null && <ChartsList observs={this.state.data.observs}/>}
+        </div>
       </div>
     );
   }
