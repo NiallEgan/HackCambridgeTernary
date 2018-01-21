@@ -12,14 +12,14 @@ def get_ingredient(rxcui):
     print(ings)
     return ings
     
-def get_summary(medicine):
+def get_summary(medicine, language):
     print(medicine)
     def first_two_sentences(string):
         sentences = string.split('\n')
         return sentences[0]
     try:
         # TODO: Figure out when simple english fails
-        wikipedia.set_lang('en')
+        wikipedia.set_lang(language)
         return first_two_sentences(wikipedia.summary(medicine))
     except wikipedia.exceptions.PageError:
         wikipedia.set_lang('en')
@@ -28,9 +28,10 @@ def get_summary(medicine):
 def insert_descriptions(intermediate_format):
     intermediate_format = json.loads(intermediate_format)
     medication_list = intermediate_format['medreqs']
+    language = intermediate_format['person']['languages'][0][0:2]
 
     description = {medication['type']: 
-            [get_summary(ingredient) for ingredient in get_ingredient(medication['code'])] \
+            [get_summary(ingredient, language) for ingredient in get_ingredient(medication['code'])] \
              for medication in medication_list if medication['status'] == 'active'}
     return json.dumps(description)
 

@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 def add_descriptions(compressed_json):
-    return json.dumps({'main_data': json.loads(compressed_json), 
+    return json.dumps({'data': json.loads(compressed_json), 
                        'explanations': json.loads(insert_descriptions(compressed_json))}) 
 
 @app.route('/')
