@@ -7,19 +7,8 @@ class PatientSummary extends Component {
   constructor(props) {
     super();
 
-    /*
-    var name = props.data.entry[1].resource.name[0];
-    this.name = {
-      prefix: name.prefix[0].replace(/[0-9]/g, ''),
-      first:  name.given[0].replace(/[0-9]/g, ''),
-      last:   name.family.replace(/[0-9]/g, '')
-    };
-
-    this.dob = props.data.entry[1].resource.birthDate;
-    this.gender = props.data.entry[1].resource.gender;
-    */
-
     this.person = props.data.person;
+    this.address = this.person.address.split(",");
   }
 
   render() {
@@ -29,7 +18,7 @@ class PatientSummary extends Component {
         <h4 className="PatientSummary-heading">{this.props.data.provider}</h4>
 
         <div className="PatientSummary-line">
-          <label className="PatientSummary-tag">DOB:</label>
+          <label className="PatientSummary-tag">Date of Birth:</label>
           <label className="PatientSummary-field">{this.person.birthday}</label>
         </div>
 
@@ -41,15 +30,15 @@ class PatientSummary extends Component {
         <div className="PatientSummary-line">
           <label className="PatientSummary-tag">Address:</label>
           <div className="PatientSummary-address">
-            <label>{this.person.address.house} {this.person.address.street}</label><br/>
-            <label>{this.person.address.city}</label><br/>
-            <label>{this.person.address.country}</label>
+            <label>{this.address[0]}, {this.address[1]}</label><br/>
+            <label>{this.address[2]}</label><br/>
+            <label>{this.address[3]}</label>
           </div>
         </div>
 
         <div className="PatientSummary-line">
           <label className="PatientSummary-tag">Phone:</label>
-          <label className="PatientSummary-field">{this.person.phone}</label>
+          <label className="PatientSummary-field">{this.person.phone[0].value.split(" ")[0]}</label>
         </div>
 
         <div className="PatientSummary-line">

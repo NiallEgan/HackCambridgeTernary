@@ -10,14 +10,13 @@ def get_ingredient(rxcui):
     tree = xml.etree.ElementTree.fromstring(response)
     ings = [ing.text for ing in tree.findall("./allRelatedGroup/conceptGroup[tty='IN']/conceptProperties/name")]
     return ings
-    
+  
 def get_summary(medicine):
     def first_two_sentences(string):
         sentences = string.split('\n')
         return sentences[0]
     try:
-        # TODO: Figure out when simple english fails
-        wikipedia.set_lang('en')
+        wikipedia.set_lang(language)
         return first_two_sentences(wikipedia.summary(medicine))
     except wikipedia.exceptions.PageError:
         wikipedia.set_lang('en')
@@ -30,11 +29,11 @@ def insert_descriptions(intermediate_format):
     for item in medication_requests:
         if item['type'] not in medication_types and item['status'] == 'active':
             medication_types[item['type']] = [get_summary(ingredient) for ingredient in get_ingredient(item['code'])]
-    return medication_types
+    return json.dumps(medication_types)
 
 
 if __name__ == '__main__':
-    print(insert_descriptions("""{"medreqs": 
+    print(insert_descriptions("""{"medreqs":
                                  [{"type": "Penicillin V Potassium 250 MG", "status": "active", "code":834060},
                                    {"type": "24 HR Metformin hydrochloride 500 MG Extended Release Oral Tablet",
                                     "code": "860975", "status": "active"}]}"""))

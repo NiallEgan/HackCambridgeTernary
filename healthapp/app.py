@@ -5,8 +5,11 @@ from healthapp.bin.explanation_getter import insert_descriptions
 import os
 
 import json
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 
 # Indexes names (given and family) against their file numbers.
 @app.before_first_request
@@ -34,8 +37,8 @@ def add_descriptions(compressed_json):
     if compressed_json == '':
         return ''
     comp = json.loads(compressed_json)
-    expl = insert_descriptions(compressed_json)
-    return json.dumps({'main_data': comp, 'explanations': expl}) 
+    expl = json.loads(insert_descriptions(compressed_json))
+    return json.dumps({'data': comp, 'explanations': expl}) 
 
 @app.route('/ayylmao')
 def ayylmao():
@@ -50,8 +53,7 @@ def display_record(id):
     if not os.path.exists('../data/{}.json'.format(id)):
         abort(404)
     f = open('../data/{}.json'.format(id), 'r')
-    red = compressJson(f.read())
-    return add_descriptions(red)
+    return add_descriptions(f.read())
     
     
     
@@ -63,6 +65,3 @@ def search(name):
         return redirect(url_for('display_record',id = x))
     else:
         return "<h1>Error: person not found</h1>"
-    
-    
-    

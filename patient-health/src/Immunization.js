@@ -13,7 +13,7 @@ class Immunization extends Component {
 
         <div className="Immunization-line">
           <label className="Immunization-tag">Date:</label>
-          <label className="Immunization-field">{this.props.date}</label>
+          <label className="Immunization-field">{this.props.date.split("T")[0]}</label>
         </div>
 
       </div>
