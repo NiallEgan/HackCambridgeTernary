@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './Condition.css';
 
 class Condition extends Component {
-  //var gaussian = require('guassian');
-
 
   render() {
 
