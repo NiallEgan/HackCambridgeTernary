@@ -84,67 +84,37 @@ class App extends Component {
       ],
 
       observs: {
-        weight: {
+        "Body Weight": {
           units: "kg",
           values: [
             {
-              points: [
-                {
-                  series: "Weight",
-                  value: "80"
-                }
-              ],
-              date: "02/01/03"
+                  value: "80",
+                  date: "02/01/03"
             },
             {
-              points: [
-                {
-                  series: "Weight",
-                  value: "83"
-                }
-              ],
-              date: "02/01/04"
+                  value: "83",
+                  date: "02/01/04"
             },
             {
-              points: [
-                {
-                  series: "Weight",
-                  value: "81"
-                }
-              ],
-              date: "02/01/05"
+                  value: "81",
+                  date: "02/01/05"
             }
           ]
         },
 
-        height: {
+        "Body Height": {
           units: "m",
           values: [
-            {
-              points: [
-                {
-                  series: "Height",
-                  value: "1.87"
-                }
-              ],
-              date: "01/01/03"
+            {     date: "01/01/03",
+                  value: "146"
             },
+
             {
-              points: [
-                {
-                  series: "Height",
-                  value: "1.86"
-                }
-              ],
+                  value: "147",
               date: "01/01/04"
             },
             {
-              points: [
-                {
-                  series: "Height",
-                  value: "1.84"
-                }
-              ],
+                  value: "150",
               date: "01/01/05"
             }
           ]
