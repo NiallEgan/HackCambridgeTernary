@@ -1,26 +1,13 @@
 # Hack Cambridge: Ternary
 
-====
-TODO
-====
+### Possible Names
+* MedScape
+* MedFront
+* Health something idk
 
----
-Frontend
-<ul>
-    <li>Displaying key info of FHIR file</li>
-    <li>Calendar?</li>
-    <li>Charts & graphs (bitches love graphs)</li>
-</ul>    
----
-Backend
-<ul>
-    <li>Setup web framework</li>
-    <li>Give context to data (i.e. place in population)</li>
-    <li>Medication & Symptoms (Layman)</li>
-    <li>Suggesting questions to ask</li>
-    <li>Estimate checkup schedule</li>
-</ul>    
----
-???????
-    Automatic reminders
+#### Summary:
+\<name\> is a health-information platform, designed to give patients quick, clear visualisations of their medical data.
 
+#### Technical Stuff:
+\<name\> is built in two parts - the server in python, using the Flask framework for serving data. The client is in javascript, using \<framework\>.
+It's not perfect, but we built it in 24 hours so it's surely not meant to be.
