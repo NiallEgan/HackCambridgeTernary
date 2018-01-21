@@ -14,6 +14,8 @@ const optionsCursorTrueWithMargin = {
 class MedicineRequest extends Component {
 
   render() {
+    console.log(this.props.exp);
+
     return (
       <div className="MedicineRequest">
         <ReactHover
@@ -22,7 +24,8 @@ class MedicineRequest extends Component {
             <label className="MedicineRequest-heading">{this.props.type}</label>
           </ReactHover.Trigger>
           <ReactHover.Hover type='hover'>
-            <div class='hover-class'>{this.props.exp.descrpition}</div>
+            {this.props.exp != null && <div class='hover-class'>{this.props.exp}</div>}
+            {this.props.exp == null && <div class='hover-class'>{this.props.type}</div>}
           </ReactHover.Hover>
         </ReactHover>
 
