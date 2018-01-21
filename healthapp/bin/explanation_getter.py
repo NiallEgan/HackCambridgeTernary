@@ -9,11 +9,9 @@ def get_ingredient(rxcui):
     response = requests.get(url).text
     tree = xml.etree.ElementTree.fromstring(response)
     ings = [ing.text for ing in tree.findall("./allRelatedGroup/conceptGroup[tty='IN']/conceptProperties/name")]
-    print(ings)
     return ings
     
 def get_summary(medicine):
-    print(medicine)
     def first_two_sentences(string):
         sentences = string.split('\n')
         return sentences[0]
@@ -33,12 +31,6 @@ def insert_descriptions(intermediate_format):
         if item['type'] not in medication_types and item['status'] == 'active':
             medication_types[item['type']] = [get_summary(ingredient) for ingredient in get_ingredient(item['code'])]
     return medication_types
-    
-    #medication_list = intermediate_format['medreqs']
-    #description = {medication['type']: 
-    #        [get_summary(ingredient) for ingredient in get_ingredient(medication['code'])] \
-    #         for medication in medication_list if medication['status'] == 'active'}
-    #return json.dumps(description)
 
 
 if __name__ == '__main__':
