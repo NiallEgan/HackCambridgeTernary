@@ -31,24 +31,17 @@ var means_and_sds = {"Body Height": {"mean": 146.13410188840018, "sd": 37.766366
 
 class ChartViewer extends Component {
 
-
-
   componentDidMount() {
+    if (this.props.values.length <= 1) return;
+
     var values = [];
     var labels = [];
 
-    var i,j,k;
-    var val,p;
-
-
-
-    for (i = 0; i < this.props.values.length; ++i) {
-      val = this.props.values[i];
-      console.log(val.value);
+    for (var i = 0; i < this.props.values.length; ++i) {
+      var val = this.props.values[i];
       labels.push(val.date);
       values.push(val.value)
     }
-
 
     var ctx = this.canvas.getContext('2d');
     var chart = new Chart(ctx, {
@@ -65,22 +58,30 @@ class ChartViewer extends Component {
       options: {responsive: false}
     });
 
+    this.setState({series: null});
   }
 
   render() {
-    return (
+    if (this.props.values.length > 1) return (
       <div>
         <div className="ChartViewer">
-          {this.state != null && <h2>{this.props.name.charAt(0).toUpperCase() + this.props.name.slice(1)} ({this.props.units})</h2>}
+          {this.state != null && <h3>{this.props.name.charAt(0).toUpperCase() + this.props.name.slice(1)} ({this.props.units})</h3>}
           <canvas ref={(c) => this.canvas = c} width="600px" />
         </div>
+
+        {means_and_sds[this.props.name] != null &&
 
         <div className="Condition-percentile">
         <label className="percentile"> Percentile: </label>
         <label className = "percentile-value"> {Math.round(cdf(this.props.values[0].value, means_and_sds[this.props.name].mean, means_and_sds[this.props.name].sd) * 100)} % </label>
 
-        </div>
+        </div>}
 
+      </div>
+    );
+    else return (
+      <div className="ChartViewer">
+        <label className="ChartViewer-label">{this.props.name.charAt(0).toUpperCase() + this.props.name.slice(1)} ({this.props.units}): {this.props.values[0].value}</label>
       </div>
     );
   }
