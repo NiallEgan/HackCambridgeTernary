@@ -11,7 +11,7 @@ def get_ingredient(rxcui):
     ings = [ing.text for ing in tree.findall("./allRelatedGroup/conceptGroup[tty='IN']/conceptProperties/name")]
     print(ings)
     return ings
-    
+
 def get_summary(medicine, language):
     print(medicine)
     def first_two_sentences(string):
@@ -30,14 +30,14 @@ def insert_descriptions(intermediate_format):
     medication_list = intermediate_format['medreqs']
     language = intermediate_format['person']['languages'][0][0:2]
 
-    description = {medication['type']: 
+    description = {medication['type']:
             [get_summary(ingredient, language) for ingredient in get_ingredient(medication['code'])] \
              for medication in medication_list if medication['status'] == 'active'}
     return json.dumps(description)
 
 
 if __name__ == '__main__':
-    print(insert_descriptions("""{"medreqs": 
+    print(insert_descriptions("""{"medreqs":
                                  [{"type": "Penicillin V Potassium 250 MG", "status": "active", "code":834060},
                                    {"type": "24 HR Metformin hydrochloride 500 MG Extended Release Oral Tablet",
                                     "code": "860975", "status": "active"}]}"""))
