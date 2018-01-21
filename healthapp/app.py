@@ -1,18 +1,20 @@
 from flask import Flask
+from flask import abort
 from healthapp.loader import *
 from healthapp.bin.explanation_getter import insert_descriptions
-<<<<<<< HEAD
+import os
 
-=======
 import json
->>>>>>> 8ab1987aaaa2606927253b334309345894046488
 
 app = Flask(__name__)
 
 
 def add_descriptions(compressed_json):
-    return json.dumps({'main_data': json.loads(compressed_json), 
-                       'explanations': json.loads(insert_descriptions(compressed_json))}) 
+    if compressed_json == '':
+        return ''
+    comp = json.loads(compressed_json)
+    expl = insert_descriptions(compressed_json)
+    return json.dumps({'main_data': comp, 'explanations': expl}) 
 
 @app.route('/')
 def index():
@@ -20,10 +22,9 @@ def index():
 
 @app.route('/record/<id>')
 def display_record(id):
+    if not os.path.exists('../data/{}.json'.format(id)):
+        abort(404)
     f = open('../data/{}.json'.format(id), 'r')
-<<<<<<< HEAD
-    return insert_descriptions(compressJson(f.read()))
-=======
-    return add_descriptions(compressJson(f.read()))
->>>>>>> 8ab1987aaaa2606927253b334309345894046488
+    red = compressJson(f.read())
+    return add_descriptions(red)
 
