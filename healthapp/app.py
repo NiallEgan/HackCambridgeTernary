@@ -8,6 +8,7 @@ import json
 
 app = Flask(__name__)
 
+# Indexes names (given and family) against their file numbers.
 @app.before_first_request
 def buildFileIndex():
     if not os.path.exists('../data/index.json'):
@@ -15,6 +16,7 @@ def buildFileIndex():
         print(names)
         json.dump(names,open('../data/index.json','w'))
 
+# Simple search
 def findFileNumber(person_name):
     obj = json.load('../data/index.json')
     for name in obj.keys():
@@ -32,6 +34,10 @@ def add_descriptions(compressed_json):
     comp = json.loads(compressed_json)
     expl = insert_descriptions(compressed_json)
     return json.dumps({'main_data': comp, 'explanations': expl}) 
+
+@app.route('/ayylmao')
+def ayylmao():
+    return "<img src=http://cdn.cnn.com/cnnnext/dam/assets/180109130845-01-donald-trump-immigration-policy-0109-exlarge-169.jpg />"
 
 @app.route('/')
 def index():
