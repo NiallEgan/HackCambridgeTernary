@@ -32,8 +32,7 @@ def insert_descriptions(intermediate_format):
     for item in medication_requests:
         if item['type'] not in medication_types and item['status'] == 'active':
             medication_types[item['type']] = [get_summary(ingredient) for ingredient in get_ingredient(item['code'])]
-    intermediate_format2['descriptions'] = medication_types
-    return json.dumps(intermediate_format2)
+    return medication_types
     
     #medication_list = intermediate_format['medreqs']
     #description = {medication['type']: 
