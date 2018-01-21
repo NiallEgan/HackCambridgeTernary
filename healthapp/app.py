@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask import abort
 from healthapp.loader import *
 from healthapp.bin.explanation_getter import insert_descriptions
@@ -18,15 +18,17 @@ def buildFileIndex():
 
 # Simple search
 def findFileNumber(person_name):
-    obj = json.load('../data/index.json')
-    for name in obj.keys():
+    obj = json.loads(open('../data/index.json').read())
+    for name1 in obj.keys():
+        name = name1.lower()
         found = True
         for nom in person_name.split(' '):
-            if nom not in name:
+            if nom.lower() not in name:
                 found = False
                 break
         if found:
-            return obj[name]
+            return obj[name1]
+    return -1
 
 def add_descriptions(compressed_json):
     if compressed_json == '':
@@ -50,4 +52,16 @@ def display_record(id):
     f = open('../data/{}.json'.format(id), 'r')
     red = compressJson(f.read())
     return add_descriptions(red)
-
+    
+    
+    
+@app.route('/search/<name>')
+def search(name):
+    x = findFileNumber(name)
+    if x != -1:
+        return redirect(url_for('display_record',id = x))
+    else:
+        return "<h1>Error: person not found</h1>"
+    
+    
+    
