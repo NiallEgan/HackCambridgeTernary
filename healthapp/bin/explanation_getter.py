@@ -9,16 +9,13 @@ def get_ingredient(rxcui):
     response = requests.get(url).text
     tree = xml.etree.ElementTree.fromstring(response)
     ings = [ing.text for ing in tree.findall("./allRelatedGroup/conceptGroup[tty='IN']/conceptProperties/name")]
-    print(ings)
     return ings
-
-def get_summary(medicine, language):
-    print(medicine)
+  
+def get_summary(medicine):
     def first_two_sentences(string):
         sentences = string.split('\n')
         return sentences[0]
     try:
-        # TODO: Figure out when simple english fails
         wikipedia.set_lang(language)
         return first_two_sentences(wikipedia.summary(medicine))
     except wikipedia.exceptions.PageError:
@@ -26,14 +23,13 @@ def get_summary(medicine, language):
         return first_two_sentences(wikipedia.summary(medicine))
 
 def insert_descriptions(intermediate_format):
-    intermediate_format = json.loads(intermediate_format)
-    medication_list = intermediate_format['medreqs']
-    language = intermediate_format['person']['languages'][0][0:2]
-
-    description = [{'name': medication['type'],
-                   'descrpition': [get_summary(ingredient, language) for ingredient in get_ingredient(medication['code'])][0]} \
-                   for medication in medication_list if medication['status'] == 'active']
-    return json.dumps(description)
+    intermediate_format2 = json.loads(intermediate_format)
+    medication_requests = intermediate_format2['medreqs']
+    medication_types = {}
+    for item in medication_requests:
+        if item['type'] not in medication_types and item['status'] == 'active':
+            medication_types[item['type']] = [get_summary(ingredient) for ingredient in get_ingredient(item['code'])]
+    return json.dumps(medication_types)
 
 
 if __name__ == '__main__':

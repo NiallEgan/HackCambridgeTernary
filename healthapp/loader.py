@@ -1,5 +1,34 @@
 import json
+import os
 import string
+
+def assembleNames(inputDir):
+    names = {}
+    if not os.path.isdir(inputDir):
+        raise ValueError("Input directory does not exist")
+    for x in os.listdir(inputDir):
+        xn = x.split('.')[0]
+        if os.path.isfile(inputDir + '/' + x) and 'json' in x and is_number(xn):
+            name = getName(inputDir + '/' + x)
+            print('Name: ' + name)
+            if name in names:
+                raise IndexError("Name already exists in index. Check for repeated names?")
+            if name != "":
+                names[name] = str(xn)
+    return names
+            
+
+def getName(inputFile):
+    try:
+        obj = json.loads(open(inputFile).read())['entry']
+        for entry in obj:
+            if entry['resource']['resourceType'] == "Patient":
+                for dictNames in entry['resource']['name']:
+                    if dictNames['use'] == 'official':
+                        return removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
+    except ValueError:
+        return ""
+    return ""
 
 def compressJson(inputFile):
     fhirClass = json.loads(inputFile)
@@ -28,7 +57,7 @@ def compressJson(inputFile):
             name = ""
             for dictNames in item['name']:
                 if dictNames['use'] == 'official':
-                    name = name + removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
+                    name = removeDigits(dictNames['given'][0]) + ' ' + removeDigits(dictNames['family'])
                     break
             if 'prefix' in dictNames:
                 outputPerson['prefix'] = dictNames['prefix'][0]
@@ -114,6 +143,13 @@ def groupObservs(ungrouped):
     for obstype in grouped:
         grouped[obstype]['values'].sort(key= lambda item: ''.join(i for i in item['date'] if i != '-'))
     return grouped
+    
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
     
 def removeDigits(inString):
     return ''.join(i for i in inString if i.isalpha())
