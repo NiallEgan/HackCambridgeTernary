@@ -121,7 +121,14 @@ class App extends Component {
         }
       }
     },
-    explanations: });
+    "explanations": [{
+    		"name": "Naproxen 20 mg",
+    		"descrpition": "This is a descrpition"
+    	}, {
+    		"name": "Penicillin V Potassium 250mg",
+    		"descrpition": "Clavulanic acid () is a \u03b2-lactam drug that functions as a mechanism-based \u03b2-lactamase inhibitor. While not effective by itself as an antibiotic, when combined with penicillin-group antibiotics, it can overcome antibiotic resistance in bacteria that secrete \u03b2-lactamase, which otherwise inactivates most penicillins."
+    	}]
+    });
   }
 
   render() {
@@ -132,7 +139,7 @@ class App extends Component {
           <h1 className="App-title">myHealth</h1>
         </header>
         {this.state != null && <PatientSummary data={this.state.data} />}
-        {this.state != null && this.state.data.medreqs.length > 0 && <MedicineRequestsList medreqs={this.state.data.medreqs}/>}
+        {this.state != null && this.state.data.medreqs.length > 0 && <MedicineRequestsList medreqs={this.state.data.medreqs} exp={this.state.explanations}/>}
         {this.state != null && this.state.data.immuns.length > 0 && <ImmunizationsList immuns={this.state.data.immuns}/>}
         {this.state != null && this.state.data.conds.length > 0 && <ConditionsList conds={this.state.data.conds}/>}
         {this.state != null && <ChartsList observs={this.state.data.observs}/>}
