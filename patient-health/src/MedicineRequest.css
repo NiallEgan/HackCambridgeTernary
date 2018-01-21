@@ -28,3 +28,10 @@
   float: right;
   font-size: 18px;
 }
+
+.hover-class {
+  background-color: white;
+  border-color: black;
+  border-width: medium;
+  border-style: solid;
+}
