@@ -57,7 +57,8 @@ def display_record(id):
     
 @app.route('/search/<name>')
 def search(name):
-    x = findFileNumber(name)
+    name2 = name.replace('_',' ')
+    x = findFileNumber(name2)
     if x != -1:
         return redirect(url_for('display_record',id = x))
     else:
