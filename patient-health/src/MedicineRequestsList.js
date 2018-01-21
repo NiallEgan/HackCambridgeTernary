@@ -25,7 +25,9 @@ class MedicineRequestsList extends Component {
       <div className="MedicineRequestsList">
         <h2 className="MedicineRequestsList-heading">Medicine Requests</h2>
 
-        {this.genMedReqs()}
+        {this.props.medreqs.map(
+          (m) => <MedicineRequest type={m.type} status={m.status} date={m.date} exp={this.props.exp[this.props.medreqs.indexOf(m)]} />
+        )}
       </div>
     );
   }
