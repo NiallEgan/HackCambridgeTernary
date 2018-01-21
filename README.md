@@ -1,11 +1,6 @@
-# Hack Cambridge: Ternary - Team Alpha Mega Satan Squadron
+## Hack Cambridge: Ternary - Team Alpha Mega Satan Squadron
 
-### Possible Names
-* MedScape
-* MedFront
-* YourHealth
-* Health something idk
-* The Patient Portal (hahaha)
+# MedScape
 
 #### Summary:
 \<name\> is a health-information platform, designed to give patients quick, clear visualisations of their medical data.
