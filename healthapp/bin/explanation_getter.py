@@ -30,9 +30,9 @@ def insert_descriptions(intermediate_format):
     medication_list = intermediate_format['medreqs']
     language = intermediate_format['person']['languages'][0][0:2]
 
-    description = {medication['type']:
-            [get_summary(ingredient, language) for ingredient in get_ingredient(medication['code'])] \
-             for medication in medication_list if medication['status'] == 'active'}
+    description = [{'name': medication['type'],
+                   'descrpition': [get_summary(ingredient, language) for ingredient in get_ingredient(medication['code'])][0]} \
+                   for medication in medication_list if medication['status'] == 'active']
     return json.dumps(description)
 
 

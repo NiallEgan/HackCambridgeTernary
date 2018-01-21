@@ -22,7 +22,7 @@ class MedicineRequest extends Component {
             <label className="MedicineRequest-heading">{this.props.type}</label>
           </ReactHover.Trigger>
           <ReactHover.Hover type='hover'>
-            <div class='hover-class'>{this.props.type}</div>
+            <div class='hover-class'>{this.props.exp.descrpition}</div>
           </ReactHover.Hover>
         </ReactHover>
 
